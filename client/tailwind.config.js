@@ -2,16 +2,7 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {
-      colors: {
-        yellow: "rgba(221, 202, 37, 0.8)",
-        glass: "rgb(255, 255, 255, 0.3);",
-        background: "#212121",
-      },
-      fontFamily: {
-        rubikWetPaint: ['"Rubik Wet Paint"', "system-ui", "sans-serif"],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
