@@ -1,12 +1,14 @@
-import React from "react";
-import Navbar from "../../../components/Navbar";
+import React from 'react'
+import Navbar from "../components/Navbar.jsx";
+
 
 const Landing = () => {
-  return (
-    <div className="bg-[#212121] flex w-screen ">
-      <Navbar />
-    </div>
-  );
-};
+    return (
+        <div className="relative bg-cover bg-center bg-no-repeat min-h-screen w-screen bg-background">
+                <Navbar/>
 
-export default Landing;
+        </div>
+    )
+}
+
+export default Landing
