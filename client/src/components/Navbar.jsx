@@ -1,7 +1,6 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from "react";
 import images from '../constants/images.jsx';
 import ProfileDropdown from './ProfileDropdown';
-
 
 /**
  * Navbar Component
@@ -14,9 +13,6 @@ const Navbar = () => {
     const [theme, setTheme] = useState("dark");
     const [activeTab, setActiveTab] = useState("Home");
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
-
-    console.log(isProfileDropdownOpen)
 
     // Navigation menu items
     const navItems = ["Home", "About", "Memberships", "Contact"];
@@ -33,8 +29,6 @@ const Navbar = () => {
      */
     const toggleProfileDropdown = useCallback((event) => {
         event.stopPropagation();
-        console.log("clicked")
-
         setIsProfileDropdownOpen(prev => !prev);
     }, []);
 
@@ -68,74 +62,84 @@ const Navbar = () => {
         };
     }, [handleOutsideClick]);
 
-    return (<div className="flex flex-col justify-center items-center bg-transparent p-4 w-screen ">
-        <nav
-            className="flex h-20 bg-[#212121] w-full rounded-2xl border border-gray-700 shadow-lg px-4 justify-evenly items-center relative">
-            {/* Logo */}
-            <img
-                src={images.logo}
-                alt="logo"
-                className="w-20 h-20 object-contain"
-            />
+    return (
+        <div className="flex flex-col justify-center items-center bg-transparent p-4 w-screen">
+            <nav className="flex h-20 bg-[#212121] w-full rounded-2xl border border-gray-700 shadow-lg px-6 justify-between items-center relative ">
+                {/* Logo */}
+                <img
+                    src={images.logo}
+                    alt="logo"
+                    className="w-14 h-14 object-contain md:w-32 md:h-32 flex"
+                />
 
-            {/* Navigation Menu Items */}
-            <ul className="flex items-center justify-center flex-grow gap-16 text-gray-300 font-bold text-xl font-poppins">
-                {navItems.map((item) => (<li
-                    key={item}
-                    className={`
+                {/* Navigation Menu Items */}
+                <ul className="hidden flex-grow gap-16 text-gray-300 font-bold text-xl font-poppins md:flex md:text-lg">
+                    {navItems.map((item) => (
+                        <li
+                            key={item}
+                            className={`
                 relative group cursor-pointer transition-all duration-300 ease-in-out
                 ${activeTab === item ? 'text-amber-400' : 'hover:text-amber-400'}
               `}
-                    onClick={() => setActiveTab(item)}
-                >
-                    {item}
-                    {/* Active/Hover Underline */}
-                    <span
-                        className={`
+                            onClick={() => setActiveTab(item)}
+                        >
+                            {item}
+                            {/* Active/Hover Underline */}
+                            <span
+                                className={`
                   absolute bottom-[-10px] left-0 h-1 bg-amber-400 transition-all duration-300 ease-in-out
                   ${activeTab === item ? 'w-full' : 'w-0 group-hover:w-full'}
                 `}
-                    />
-                </li>))}
-            </ul>
+                            />
+                        </li>
+                    ))}
+                </ul>
 
-            {/* Right Side Icons Container */}
-            <div className='flex items-center gap-4 relative'>
-                {/* Theme Toggle Button */}
-                <button
-                    onClick={toggleTheme}
-                    className="transition-transform duration-300 hover:scale-110 focus:outline-none"
-                    aria-label="Toggle Theme"
-                >
-                    {theme === "light" ? (<img src={images.moon} alt="Dark mode" className="w-8 h-8"/>) : (
-                        <img src={images.sun} alt="Light mode" className="w-8 h-8"/>)}
-                </button>
+                {/* Right Side Icons Container */}
+                <div className='hidden md:flex items-center gap-4 relative'>
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={toggleTheme}
+                        className="transition-transform duration-300 hover:scale-110 focus:outline-none"
+                        aria-label="Toggle Theme"
+                    >
+                        {theme === "light" ? (
+                            <img src={images.moon} alt="Dark mode" className="w-8 h-8 sm:w-10 sm:h-10" />
+                        ) : (
+                            <img src={images.sun} alt="Light mode" className="w-8 h-8 sm:w-10 sm:h-10" />
+                        )}
+                    </button>
 
-                {/* Notification Icon */}
-                <img
-                    src={images.notification}
-                    alt="Notifications"
-                    className="w-8 h-8 cursor-pointer hover:scale-110 transition-transform duration-300"
-                />
-
-                {/* Profile Section with Dropdown */}
-                <div className='relative'>
+                    {/* Notification Icon */}
                     <img
-                        src={images.profile}
-                        alt="Profile"
-                        onClick={toggleProfileDropdown}
-                        className="w-8 h-8 rounded-full cursor-pointer hover:scale-110 transition-transform duration-300"
+                        src={images.notification}
+                        alt="Notifications"
+                        className="w-8 h-8 cursor-pointer hover:scale-110 transition-transform duration-300 sm:w-10 sm:h-10"
                     />
 
-                    {/* Conditional Rendering of Profile Dropdown */}
-                    {isProfileDropdownOpen && (<ProfileDropdown
-                        onClose={() => setIsProfileDropdownOpen(false)}
-                        onLogout={handleLogout}
-                    />)}
+                    {/* Profile Section with Dropdown */}
+                    <div className='relative'>
+                        <img
+                            src={images.profile}
+                            alt="Profile"
+                            onClick={toggleProfileDropdown}
+                            className="w-8 h-8 rounded-full cursor-pointer hover:scale-110 transition-transform duration-300 sm:w-10 sm:h-10"
+                        />
+
+                        {/* Conditional Rendering of Profile Dropdown */}
+                        {isProfileDropdownOpen && (
+                            <ProfileDropdown
+                                onClose={() => setIsProfileDropdownOpen(false)}
+                                onLogout={handleLogout}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </div>);
+
+                <img src={images.menu} alt="Menu" className="w-6 h-6 md:hidden cursor-pointer" />
+            </nav>
+        </div>
+    );
 };
 
 export default Navbar;
