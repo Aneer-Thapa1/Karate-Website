@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Following Sparkle Cursor</title>
+    <style>
+        * {
+            cursor: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            min-height: 100vh;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            z-index: 999;
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle-fade 1s forwards;
+        }
+
+        @keyframes sparkle-fade {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+        }
+
+        .burst {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: burst-anim 0.6s forwards;
+        }
+
+        @keyframes burst-anim {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(3) translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor"></div>
+
+    <script>
+        const cursor = document.querySelector('.cursor');
+        const sparkles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let angle = 0;
+
+        // Create initial sparkles
+        for (let i = 0; i < 20; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            document.body.appendChild(sparkle);
+            sparkles.push({
+                element: sparkle,
+                x: 0,
+                y: 0,
+                velocity: 0,
+                angle: 0,
+                life: 0
+            });
+        }
+
+        // Mouse move handler
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Click handler for burst effect
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 30; i++) {
+                const burst = document.createElement('div');
+                burst.className = 'burst';
+                burst.style.left = `${e.clientX}px`;
+                burst.style.top = `${e.clientY}px`;
+                burst.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+
+                // Random burst direction
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 50 + 30;
+                burst.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                burst.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+
+                document.body.appendChild(burst);
+
+                // Remove after animation
+                setTimeout(() => burst.remove(), 600);
+            }
+        });
+
+        // Update cursor and sparkles
+        function update() {
+            // Smooth cursor follow
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+
+            // Update sparkles
+            angle += 0.1;
+            sparkles.forEach((sparkle, index) => {
+                const offset = (index / sparkles.length) * Math.PI * 2;
+                const radius = 30 + Math.sin(angle + offset) * 10;
+
+                sparkle.x = cursorX + Math.cos(angle + offset) * radius;
+                sparkle.y = cursorY + Math.sin(angle + offset) * radius;
+
+                sparkle.element.style.left = `${sparkle.x}px`;
+                sparkle.element.style.top = `${sparkle.y}px`;
+                sparkle.element.style.background =
+                    `hsl(${(angle * 10 + index * 18) % 360}, 100%, 70%)`;
+
+                // Add slight scale animation
+                sparkle.element.style.transform =
+                    `scale(${1 + Math.sin(angle * 2 + index) * 0.2})`;
+            });
+
+            requestAnimationFrame(update);
+        }
+
+        update();
+    </script>
+</body>
+
+</html>
