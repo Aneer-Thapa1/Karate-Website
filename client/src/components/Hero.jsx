@@ -10,7 +10,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full poppins overflow-x-hidden">
+    <div className="relative w-full h-screen overflow-hidden poppins">
       {/* Background image container */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-slowZoom"
@@ -24,7 +24,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60" />
 
       {/* Content */}
-      <div className="relative flex flex-col justify-center items-center h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 gap-12 hero-content opacity-0 translate-y-8">
+      <div className="absolute inset-0 flex flex-col justify-center items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-content opacity-0 translate-y-8">
         <div className="relative w-full max-w-4xl">
           {/* Main heading container with padding for strike lines */}
           <div className="relative px-32">
@@ -76,7 +76,7 @@ const Hero = () => {
 
         {/* Modern Button with hover effects */}
         <button
-          className="group relative px-8 py-4 bg-[#f29d38] text-white font-semibold rounded-lg
+          className="mt-12 group relative px-8 py-4 bg-[#f29d38] text-white font-semibold rounded-lg
           overflow-hidden transition-all duration-300 ease-out
           hover:bg-[#f29d38]/90 hover:scale-105 hover:shadow-lg hover:shadow-[#f29d38]/20
           focus:outline-none focus:ring-2 focus:ring-[#f29d38]/50 focus:ring-offset-2 focus:ring-offset-black/20

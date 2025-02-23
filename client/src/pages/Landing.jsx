@@ -8,7 +8,7 @@ const Landing = () => {
       <Navbar />
       <div className="flex flex-col w-screen overflow-hidden">
         <Hero />
-        {/* <About /> */}
+        <About />
       </div>
     </div>
   );
