@@ -1,278 +1,281 @@
-import React, { useCallback, useState } from "react";
-import images from "../constants/images.jsx";
-import ProfileDropdown from "./ProfileDropdown";
+// components/Navbar.jsx
+import React, { useState, useEffect } from "react";
 import { useTheme } from "../hooks/useTheme";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState("Home");
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [menuVisiblity, setMenuVisiblity] = useState(false);
-  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("Home");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const isDark = theme === "dark";
 
-  const navItems = ["Home", "About", "Memberships", "Contact"];
-
-  const toggleProfileDropdown = useCallback((event) => {
-    event.stopPropagation();
-    setIsProfileDropdownOpen((prev) => !prev);
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    console.log("Logging out user");
-  }, []);
-
-  const handleOutsideClick = useCallback(() => {
-    if (isProfileDropdownOpen) {
-      setIsProfileDropdownOpen(false);
-    }
-  }, [isProfileDropdownOpen]);
-
-  React.useEffect(() => {
-    document.addEventListener("click", handleOutsideClick);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
     };
-  }, [handleOutsideClick]);
 
-  const handleMenu = () => {
-    setMenuVisiblity((prev) => !prev);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isMenuOpen && !e.target.closest(".navbar-container")) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenuOpen]);
+
+  // Navigation links
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Programs", path: "/programs" },
+    { name: "Schedule", path: "/schedule" },
+    { name: "Instructors", path: "/instructors" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
+
+  const handleLinkClick = (linkName) => {
+    setActiveLink(linkName);
+    setIsMenuOpen(false);
   };
 
   return (
-    <div className="flex flex-col justify-center items-center bg-transparent p-4 w-screen fixed z-50">
-      <nav
-        className="flex h-20 bg-white dark:bg-background-dark w-full rounded-2xl border border-gray-200 dark:border-gray-700
-                         shadow-lg px-6 justify-between items-center"
+    <nav className="navbar-container fixed w-full top-0 z-50 font-poppins">
+      {/* Main Navbar */}
+      <div
+        className={`flex items-center justify-between px-4 md:px-8 py-4 transition-all duration-300 ${
+          isScrolled
+            ? isDark
+              ? "bg-background-dark/95 shadow-md-dark backdrop-blur-sm"
+              : "bg-background-light/95 shadow-md-light backdrop-blur-sm"
+            : isDark
+            ? "bg-background-dark"
+            : "bg-background-light"
+        } ${isDark ? "text-text-dark-primary" : "text-text-light-primary"}`}
       >
         {/* Logo */}
-        <img
-          src={images.logo}
-          alt="logo"
-          className="w-14 h-14 object-contain md:w-24 md:h-24 flex"
-        />
-
-        {/* Navigation Menu Items */}
-        <ul className="hidden md:gap-6 lg:gap-16 text-gray-600 dark:text-gray-300 font-bold text-xl font-poppins md:flex md:text-lg">
-          {navItems.map((item) => (
-            <li
-              key={item}
-              className={`
-                                relative group cursor-pointer transition-all duration-300 ease-in-out
-                                ${
-                                  activeTab === item
-                                    ? "text-primary"
-                                    : "hover:text-primary"
-                                }
-                            `}
-              onClick={() => setActiveTab(item)}
+        <div className="flex items-center">
+          <span className="text-xl md:text-2xl font-semibold tracking-wider relative group">
+            <span className="text-primary-600 transition-all duration-300 group-hover:text-primary-500">
+              VISION
+            </span>
+            <span
+              className={`font-light transition-all duration-300 ${
+                isDark ? "text-text-dark-primary" : "text-text-light-primary"
+              }`}
             >
-              {item}
-              <span
-                className={`
-                                absolute bottom-[-10px] left-0 h-1 bg-primary transition-all duration-300 ease-in-out
-                                ${
-                                  activeTab === item
-                                    ? "w-full"
-                                    : "w-0 group-hover:w-full"
-                                }
-                            `}
-              />
-            </li>
-          ))}
-        </ul>
-
-        {/* Right Side Icons Container */}
-        <div className="hidden md:flex items-center gap-6 relative">
-          <button
-            onClick={toggleTheme}
-            className="transition-transform duration-300 hover:scale-110 focus:outline-none"
-            aria-label="Toggle Theme"
-          >
-            {theme === "light" ? (
-              <img
-                src={images.moon}
-                alt="Dark mode"
-                className="md:w-8 md:h-8"
-              />
-            ) : (
-              <img
-                src={images.sun}
-                alt="Light mode"
-                className="md:w-8 md:h-8"
-              />
-            )}
-          </button>
-
-          <img
-            src={images.notification}
-            alt="Notifications"
-            className="w-8 h-8 cursor-pointer hover:scale-110 transition-transform duration-300 md:w-8 md:h-8"
-          />
-
-          <div className="relative">
-            <img
-              src={images.profile}
-              alt="Profile"
-              onClick={toggleProfileDropdown}
-              className="rounded-full cursor-pointer hover:scale-110 transition-transform duration-300 md:w-8 md:h-8"
-            />
-
-            {isProfileDropdownOpen && (
-              <ProfileDropdown
-                onClose={() => setIsProfileDropdownOpen(false)}
-                onLogout={handleLogout}
-              />
-            )}
-          </div>
+              {" "}
+              MARTIAL ART
+            </span>
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
+          </span>
         </div>
 
-        <img
-          src={images.menu}
-          alt="Menu"
-          className="w-6 h-6 md:hidden cursor-pointer"
-          onClick={handleMenu}
-        />
-      </nav>
-
-      {/* Mobile Menu */}
-      {menuVisiblity && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden "
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setMenuVisiblity(false);
-            }
-          }}
-        >
-          <div
-            className="absolute right-0 top-0 h-screen w-72 bg-white dark:bg-background-dark
-                                shadow-2xl animate-in slide-in-from-right duration-300"
-          >
-            <button
-              onClick={handleMenu}
-              className="absolute -left-12 top-4 p-2 rounded-full bg-white/10 backdrop-blur-sm
-                                   hover:bg-white/20 transition-all duration-200"
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-8">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.path}
+              onClick={(e) => {
+                e.preventDefault();
+                handleLinkClick(link.name);
+              }}
+              className="relative group py-2 overflow-hidden"
             >
-              <img
-                src={images.close}
-                alt="Close"
-                className="w-6 h-6 cursor-pointer"
-              />
-            </button>
+              <span
+                className={`${
+                  activeLink === link.name
+                    ? "text-primary-500"
+                    : isDark
+                    ? "text-text-dark-secondary"
+                    : "text-text-light-secondary"
+                } font-medium transition-colors duration-300 hover:text-primary-500`}
+              >
+                {link.name}
+              </span>
 
-            <div className="h-full flex flex-col">
-              <div className="p-6 flex justify-center border-b border-gray-200 dark:border-gray-700">
-                <img
-                  src={images.logo}
-                  alt="Logo"
-                  className="h-8 object-contain"
-                />
-              </div>
+              {/* Active indicator - improved animation */}
+              <span
+                className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary-500 transition-all duration-300 transform ${
+                  activeLink === link.name
+                    ? "translate-x-0"
+                    : "-translate-x-full group-hover:translate-x-0"
+                }`}
+              ></span>
+            </a>
+          ))}
 
-              <nav className="flex-1 overflow-y-auto py-8">
-                <ul className="space-y-2 px-4">
-                  {navItems.map((item) => (
-                    <li key={item}>
-                      <button
-                        onClick={() => {
-                          setActiveTab(item);
-                          setMenuVisiblity(false);
-                        }}
-                        className={`w-full px-4 py-3 rounded-xl text-left transition-all duration-200
-                                                    ${
-                                                      activeTab === item
-                                                        ? "bg-primary/10 text-primary font-medium"
-                                                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                                    }`}
-                      >
-                        {item}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+          {/* Theme Toggle Button - Enhanced */}
+          <button
+            onClick={toggleTheme}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+              isDark
+                ? "bg-secondary-800 hover:bg-secondary-700"
+                : "bg-secondary-200 hover:bg-secondary-300"
+            } overflow-hidden`}
+            aria-label="Toggle dark mode"
+          >
+            <div
+              className={`w-6 h-6 rounded-full transition-all duration-500 ${
+                isDark
+                  ? "bg-background-dark border-2 border-text-dark-primary shadow-md transform translate-x-1 -translate-y-1"
+                  : "bg-accent-400 transform scale-75"
+              }`}
+            ></div>
+          </button>
+        </div>
 
-              {isLoggedin && (
-                <div className="px-4 py-6 border-t border-gray-200 dark:border-gray-700 space-y-4">
-                  <div className="px-4 flex items-center gap-3">
-                    <img
-                      src={images.profile}
-                      alt="Profile"
-                      className="w-10 h-10 rounded-full border-2 border-primary"
-                    />
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">
-                        John Doe
-                      </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        johndoe@gmail.com
-                      </p>
-                    </div>
-                  </div>
+        {/* Mobile Menu Button - Enhanced */}
+        <button
+          className="md:hidden w-10 h-10 flex flex-col items-center justify-center space-y-1.5 focus:outline-none relative z-50"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span
+            className={`block w-6 h-0.5 transition-all duration-300 rounded-full ${
+              isDark ? "bg-text-dark-primary" : "bg-text-light-primary"
+            } ${isMenuOpen ? "rotate-45 translate-y-2 bg-primary-500" : ""}`}
+          ></span>
+          <span
+            className={`block w-6 h-0.5 transition-all duration-300 rounded-full ${
+              isDark ? "bg-text-dark-primary" : "bg-text-light-primary"
+            } ${isMenuOpen ? "opacity-0 translate-x-3" : ""}`}
+          ></span>
+          <span
+            className={`block w-6 h-0.5 transition-all duration-300 rounded-full ${
+              isDark ? "bg-text-dark-primary" : "bg-text-light-primary"
+            } ${isMenuOpen ? "-rotate-45 -translate-y-2 bg-primary-500" : ""}`}
+          ></span>
+        </button>
+      </div>
 
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        setMenuVisiblity(false);
-                      }}
-                      className="w-full px-4 py-2.5 rounded-lg text-left text-gray-600 dark:text-gray-300
-                                                   hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                    >
-                      View Profile
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setMenuVisiblity(false);
-                      }}
-                      className="w-full px-4 py-2.5 rounded-lg text-left text-red-600
-                                                   hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors duration-200"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
+      {/* Mobile Menu - Improved animation */}
+      <div
+        className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ${
+          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Backdrop with improved opacity transition */}
+        <div
+          className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+            isMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
 
-              <div className="px-4 py-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between px-4">
-                  <button
-                    onClick={toggleTheme}
-                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800
-                                               transition-colors duration-200"
-                  >
-                    {theme === "light" ? (
-                      <img
-                        src={images.moon}
-                        alt="Dark mode"
-                        className="w-5 h-5"
-                      />
-                    ) : (
-                      <img
-                        src={images.sun}
-                        alt="Light mode"
-                        className="w-5 h-5"
-                      />
-                    )}
-                  </button>
-                  <button
-                    className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800
-                                                   transition-colors duration-200"
-                  >
-                    <img
-                      src={images.notification}
-                      alt="Notifications"
-                      className="w-5 h-5"
-                    />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
-                  </button>
-                </div>
-              </div>
+        {/* Sidebar with improved animation */}
+        <div
+          className={`absolute right-0 top-0 h-full w-72 shadow-lg-dark transform transition-transform duration-500 ease-in-out ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          } ${
+            isDark
+              ? "bg-background-paper-dark border-l border-secondary-800"
+              : "bg-background-paper-light border-l border-secondary-200"
+          } animate-slide-in-right`}
+        >
+          <div className="flex flex-col items-center justify-center h-full py-8 px-4">
+            {navLinks.map((link, index) => (
+              <a
+                key={link.name}
+                href={link.path}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLinkClick(link.name);
+                }}
+                className={`w-full text-center py-4 my-1 font-medium relative overflow-hidden transition-all duration-300 ${
+                  activeLink === link.name
+                    ? isDark
+                      ? "text-primary-400"
+                      : "text-primary-600"
+                    : isDark
+                    ? "text-text-dark-secondary hover:text-text-dark-primary"
+                    : "text-text-light-secondary hover:text-text-light-primary"
+                } ${isMenuOpen ? "animate-fade-in" : ""}`}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <span className="relative z-10">{link.name}</span>
+
+                {/* Active background */}
+                <span
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    activeLink === link.name
+                      ? isDark
+                        ? "bg-primary-900/20"
+                        : "bg-primary-100/50"
+                      : "bg-transparent hover:bg-secondary-100/10"
+                  } rounded-md`}
+                ></span>
+
+                {/* Active indicator - left border */}
+                {activeLink === link.name && (
+                  <span className="absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-primary-500"></span>
+                )}
+              </a>
+            ))}
+
+            {/* Theme Toggle Button (Mobile) - Enhanced */}
+            <div
+              className="mt-8 flex items-center justify-center w-full border-t border-b py-4 px-2 rounded-md transition-all duration-300 animate-fade-in"
+              style={{
+                animationDelay: `${navLinks.length * 0.05 + 0.1}s`,
+                borderColor: isDark
+                  ? "rgb(51, 65, 85, 0.5)"
+                  : "rgb(203, 213, 225, 0.5)",
+              }}
+            >
+              <span
+                className={
+                  isDark
+                    ? "text-text-dark-secondary"
+                    : "text-text-light-secondary"
+                }
+              >
+                {isDark ? "Dark Mode" : "Light Mode"}
+              </span>
+              <button
+                onClick={toggleTheme}
+                className={`ml-auto w-12 h-6 rounded-full flex items-center transition-all duration-300 ${
+                  isDark
+                    ? "bg-secondary-700 justify-end"
+                    : "bg-secondary-300 justify-start"
+                }`}
+                aria-label="Toggle dark mode"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full mx-0.5 transition-all duration-300 ${
+                    isDark ? "bg-primary-500 shadow-md" : "bg-accent-500"
+                  }`}
+                ></div>
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </nav>
   );
 };
 
