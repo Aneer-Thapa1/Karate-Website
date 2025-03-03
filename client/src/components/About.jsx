@@ -1,394 +1,438 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowRight,
-  Target,
-  Globe,
-  Rocket,
-  Medal,
-  Layers,
-  Linkedin,
-  Instagram,
-  Twitter,
-} from "lucide-react";
+import { Building, Trophy, FileText, Brain, Users, Star } from "lucide-react";
 
-const About = () => {
-  const [activeSection, setActiveSection] = useState(null);
-  const [selectedInstructor, setSelectedInstructor] = useState(null);
+const AboutSection = () => {
+  const [activeValue, setActiveValue] = useState(null);
+  const [activeFeature, setActiveFeature] = useState(null);
 
-  const keyHighlights = [
+  // Stagger animation variants for children
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+  };
+
+  // Core values with images
+  const coreValues = [
     {
-      icon: Target,
-      title: "Precision Training",
-      description:
-        "Meticulously crafted programs that focus on technique, discipline, and personal growth.",
-      color: "text-primary",
-      background: "bg-orange-50 dark:bg-orange-900/20",
-      details: [
-        "Advanced skill development",
-        "Technique-focused curriculum",
-        "Continuous performance tracking",
-      ],
+      label: "Respect",
+      value:
+        "Building mutual respect and courtesy in all interactions, both in and outside the dojo.",
+      image:
+        "https://images.unsplash.com/photo-1553545204-4f7d339aa06a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
     },
     {
-      icon: Globe,
-      title: "Global Standards",
-      description:
-        "International-level training methodologies adapted to individual needs.",
-      color: "text-green-500",
-      background: "bg-green-50 dark:bg-green-900/20",
-      details: [
-        "Certified international instructors",
-        "World-class training techniques",
-        "Multicultural learning environment",
-      ],
+      label: "Discipline",
+      value:
+        "Developing focus, self-control, and dedication through consistent practice and mindful training.",
+      image:
+        "https://images.unsplash.com/photo-1609710228159-0fa9bd7c0827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
     },
     {
-      icon: Rocket,
-      title: "Accelerated Progress",
-      description:
-        "Innovative approach to martial arts that rapidly develops skills and confidence.",
-      color: "text-blue-500",
-      background: "bg-blue-50 dark:bg-blue-900/20",
-      details: [
-        "Personalized skill acceleration",
-        "Mental and physical development",
-        "Breakthrough learning methods",
-      ],
+      label: "Perseverance",
+      value:
+        "Cultivating determination, resilience, and grit to overcome challenges on the martial arts journey.",
+      image:
+        "https://images.unsplash.com/photo-1616279969885-33a5fa9be7a6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80",
+    },
+    {
+      label: "Integrity",
+      value:
+        "Fostering honesty, strong moral principles, and authentic self-expression in all aspects of life.",
+      image:
+        "https://images.unsplash.com/photo-1591600970349-aaa74069333d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
     },
   ];
 
-  const achievementHighlights = [
+  // Features with icons
+  const features = [
     {
-      icon: Medal,
-      title: "Championship Success",
-      value: "50+",
-      description: "National and international competition victories",
+      title: "State-of-the-Art Facility",
+      description:
+        "Train in our modern, fully-equipped 5,000 sq. ft. facility with dedicated training zones and premium safety equipment.",
+      icon: Building,
     },
     {
-      icon: Layers,
-      title: "Training Expertise",
-      value: "25+",
-      description: "Years of martial arts instruction and development",
-    },
-  ];
-
-  const instructors = [
-    {
-      name: "Master John Rodriguez",
-      role: "Chief Instructor",
-      image: "/api/placeholder/400/400",
-      bio: "With 25 years of martial arts experience, John brings unparalleled expertise and passion to our training.",
-      socialLinks: {
-        linkedin: "#",
-        instagram: "#",
-        twitter: "#",
-      },
-      achievements: [
-        "5th Degree Black Belt",
-        "National Champion",
-        "International Training Certified",
-      ],
+      title: "Certified Instructors",
+      description:
+        "Learn from our team of certified instructors who bring decades of combined experience and competitive achievements.",
+      icon: Trophy,
     },
     {
-      name: "Sarah Kim",
-      role: "Senior Instructor",
-      image: "/api/placeholder/400/400",
-      bio: "Specializing in youth development and advanced techniques, Sarah transforms lives through martial arts.",
-      socialLinks: {
-        linkedin: "#",
-        instagram: "#",
-        twitter: "#",
-      },
-      achievements: [
-        "3rd Degree Black Belt",
-        "Youth Training Specialist",
-        "Community Leadership Award",
-      ],
+      title: "Comprehensive Programs",
+      description:
+        "Choose from a variety of martial arts styles and specialized programs tailored to different age groups and skill levels.",
+      icon: FileText,
     },
     {
-      name: "Marcus Thompson",
-      role: "Advanced Training Coach",
-      image: "/api/placeholder/400/400",
-      bio: "Combining traditional wisdom with modern training methods, Marcus brings innovation to every class.",
-      socialLinks: {
-        linkedin: "#",
-        instagram: "#",
-        twitter: "#",
-      },
-      achievements: [
-        "4th Degree Black Belt",
-        "Self-Defense Methodology Expert",
-        "International Competition Judge",
-      ],
+      title: "Character Development",
+      description:
+        "Our curriculum integrates character development with physical training to build well-rounded individuals.",
+      icon: Brain,
+    },
+    {
+      title: "Supportive Community",
+      description:
+        "Join a supportive community of practitioners who encourage and motivate each other to achieve their goals.",
+      icon: Users,
+    },
+    {
+      title: "Proven Results",
+      description:
+        "Our students have achieved remarkable results in competitions, personal fitness goals, and everyday confidence.",
+      icon: Star,
     },
   ];
 
   return (
-    <div className="relative w-full bg-background-light dark:bg-background-dark text-black dark:text-white font-poppins">
-      {/* Decorative Background */}
-      <div className="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-blue-500/20 rounded-full blur-3xl" />
-      </div>
-
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        {/* Hero Section */}
+    <section id="about" className="py-24 bg-white">
+      <div className="w-[80%] mx-auto">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 10,
+            duration: 0.6,
+          }}
+          className="text-center mb-20"
         >
-          <h1 className="text-5xl font-black mb-4 text-primary tracking-tight">
-            Vision Martial Arts
-          </h1>
-          <p className="text-xl max-w-2xl mx-auto text-gray-700 dark:text-gray-300 leading-relaxed">
-            Transforming lives through a holistic approach to martial arts,
-            empowering individuals to unlock their ultimate potential and inner
-            strength.
+          <h2 className="relative inline-block text-4xl md:text-5xl font-bold mb-6">
+            About <span className="text-gray-800">Vision</span>
+            <motion.div
+              className="absolute -bottom-2 left-0 h-1 bg-gray-800"
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              viewport={{ once: true }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 10,
+                duration: 0.8,
+                delay: 0.3,
+              }}
+            />
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Established in 2010, Vision Martial Arts is dedicated to providing
+            exceptional martial arts training in a respectful and supportive
+            environment for students of all ages and skill levels.
           </p>
         </motion.div>
 
-        {/* Key Highlights Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {keyHighlights.map((highlight, index) => (
-            <motion.div
-              key={highlight.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className={`${highlight.background} rounded-2xl p-6 border border-transparent 
-                         hover:border-primary/20 transition-all duration-300 
-                         transform hover:-translate-y-2 group`}
-              onMouseEnter={() => setActiveSection(index)}
-              onMouseLeave={() => setActiveSection(null)}
-            >
-              <div className="flex items-center mb-4">
-                <highlight.icon
-                  className={`${highlight.color} mr-4`}
-                  size={48}
-                  strokeWidth={1.5}
-                />
-                <h2 className="text-2xl font-bold text-black dark:text-white">
-                  {highlight.title}
-                </h2>
-              </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
-                {highlight.description}
-              </p>
-
-              <AnimatePresence>
-                {activeSection === index && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{
-                      opacity: 1,
-                      height: "auto",
-                      transition: { duration: 0.3 },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      height: 0,
-                      transition: { duration: 0.2 },
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                      {highlight.details.map((detail, detailIndex) => (
-                        <li key={detailIndex} className="flex items-center">
-                          <span className="w-2 h-2 mr-2 bg-primary rounded-full" />
-                          {detail}
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Achievements Section */}
-        <div className="bg-white dark:bg-secondary-dark rounded-2xl shadow-lg p-12 grid md:grid-cols-2 gap-8 mb-16">
-          <div>
-            <h2 className="text-3xl font-bold mb-6 text-primary">
-              Our Journey of Excellence
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-              Vision Martial Arts has been at the forefront of martial arts
-              training, combining traditional wisdom with innovative techniques.
-              Our commitment to excellence has transformed countless lives,
-              helping individuals discover their inner strength and potential.
-            </p>
-            <button className="flex items-center text-primary hover:text-primary/80 transition-colors">
-              Discover Our Story
-              <ArrowRight className="ml-2" size={20} />
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-6">
-            {achievementHighlights.map((achievement, index) => (
-              <div
-                key={achievement.title}
-                className="bg-gray-50 dark:bg-background-dark/50 rounded-xl p-6 text-center"
-              >
-                <achievement.icon
-                  className={`mx-auto mb-4 ${
-                    achievement.color || "text-primary"
-                  }`}
-                  size={48}
-                  strokeWidth={1.5}
-                />
-                <h3 className="text-4xl font-black text-primary mb-2">
-                  {achievement.value}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  {achievement.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Instructors Section */}
-        <div>
+        {/* About Content with Large Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center mb-24">
+          {/* Image column - spans 3 of 5 columns */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
+            className="lg:col-span-3 relative"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 10,
+              duration: 0.8,
+            }}
           >
-            <h2 className="text-4xl font-bold text-primary mb-4">
-              Our Expert Instructors
-            </h2>
-            <p className="text-xl max-w-2xl mx-auto text-gray-700 dark:text-gray-300">
-              Meet the passionate professionals who bring decades of martial
-              arts expertise to Vision Martial Arts
-            </p>
+            <div className="relative overflow-hidden rounded-lg">
+              {/* Multiple layer effect */}
+              <div className="absolute top-0 left-0 w-full h-full bg-gray-800 rounded-lg transform translate-x-4 translate-y-4 -z-10"></div>
+              <motion.div
+                className="relative overflow-hidden rounded-lg aspect-[16/9]"
+                whileHover={{
+                  scale: 1.02,
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 10,
+                  },
+                }}
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1574618463836-b309bda76b7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80"
+                  alt="Our Training Facility"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-md p-4 rounded-lg inline-block">
+                    <span className="text-white font-bold text-sm tracking-wider uppercase">
+                      Established 2010
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {instructors.map((instructor, index) => (
-              <motion.div
-                key={instructor.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="bg-white dark:bg-secondary-dark rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
-                onClick={() => setSelectedInstructor(instructor)}
-              >
-                <div className="relative">
-                  <img
-                    src={instructor.image}
-                    alt={instructor.name}
-                    className="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <div className="text-white">
-                      <h3 className="text-2xl font-bold">{instructor.name}</h3>
-                      <p className="text-sm">{instructor.role}</p>
-                    </div>
+          {/* Text column - spans 2 of 5 columns */}
+          <motion.div
+            className="lg:col-span-2 text-gray-700"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              type: "spring",
+              stiffness: 100,
+              damping: 10,
+              duration: 0.8,
+              delay: 0.2,
+            }}
+          >
+            <h3 className="text-3xl font-bold mb-6">Our Philosophy</h3>
+            <div className="w-16 h-1 bg-gray-800 mb-6"></div>
+            <p className="mb-6 text-gray-600">
+              At Vision Martial Arts, we believe that martial arts training
+              extends beyond physical techniques. Our comprehensive approach
+              focuses on developing the mind, body, and character of each
+              student.
+            </p>
+            <p className="mb-8 text-gray-600">
+              Whether you're looking to improve fitness, learn self-defense, or
+              develop mental focus, our structured programs provide a clear path
+              to achieving your goals while instilling core values of respect,
+              discipline, perseverance, and integrity.
+            </p>
+
+            {/* Animated statistics */}
+            <div className="grid grid-cols-2 gap-6 mt-8">
+              {[
+                { value: "1,500+", label: "Students Trained" },
+                { value: "15+", label: "Years Experience" },
+                { value: "8", label: "Black Belt Instructors" },
+                { value: "4", label: "Martial Arts Styles" },
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 10,
+                    duration: 0.4,
+                    delay: 0.3 + index * 0.1,
+                  }}
+                  className="text-center p-3 border border-gray-200 rounded-lg"
+                >
+                  <div className="text-2xl font-bold text-gray-900">
+                    {stat.value}
                   </div>
+                  <div className="text-sm text-gray-500">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Core Values with Interactive Cards */}
+        <motion.div
+          className="mb-24"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 10,
+            duration: 0.6,
+          }}
+        >
+          <h3 className="text-3xl font-bold text-center mb-12">
+            Our Core Values
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {coreValues.map((value, index) => (
+              <motion.div
+                key={index}
+                className="relative overflow-hidden rounded-lg group cursor-pointer h-64"
+                whileHover={{
+                  scale: 1.03,
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 10,
+                  },
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 10,
+                  duration: 0.5,
+                  delay: index * 0.1,
+                }}
+                onMouseEnter={() => setActiveValue(index)}
+                onMouseLeave={() => setActiveValue(null)}
+                onClick={() =>
+                  setActiveValue(activeValue === index ? null : index)
+                }
+              >
+                <div className="absolute inset-0">
+                  <img
+                    src={value.image}
+                    alt={value.label}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                </div>
+
+                <div className="absolute inset-0 p-6 flex flex-col justify-between">
+                  <h4 className="text-xl font-bold text-white">
+                    {value.label}
+                  </h4>
+
+                  <AnimatePresence>
+                    {activeValue === index && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        }}
+                        className="bg-white bg-opacity-90 p-4 rounded-lg"
+                      >
+                        <p className="text-sm text-gray-800">{value.value}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </div>
+        </motion.div>
 
-      {/* Instructor Modal */}
-      <AnimatePresence>
-        {selectedInstructor && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-            onClick={() => setSelectedInstructor(null)}
+        {/* Why Choose Us - Animated Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="mb-16"
+        >
+          <h3 className="text-3xl font-bold text-center mb-12">
+            Why Choose Vision Martial Arts
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => {
+              const FeatureIcon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className={`bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all duration-300 ${
+                    activeFeature === index
+                      ? "shadow-lg transform scale-105"
+                      : ""
+                  }`}
+                  whileHover={{
+                    y: -5,
+                    boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.15)",
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 10,
+                    },
+                  }}
+                  onMouseEnter={() => setActiveFeature(index)}
+                  onMouseLeave={() => setActiveFeature(null)}
+                >
+                  <div className="flex items-start">
+                    <div className="mr-4 mt-1 text-gray-800">
+                      <FeatureIcon size={32} strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold mb-2 text-gray-900">
+                        {feature.title}
+                      </h4>
+                      <p className="text-gray-600 text-sm">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 10,
+            duration: 0.6,
+          }}
+          className="text-center mt-16 bg-gray-50 p-12 rounded-xl"
+        >
+          <h3 className="text-3xl font-bold mb-4">
+            Ready to Begin Your Journey?
+          </h3>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+            Take the first step toward mastering martial arts and transforming
+            your life. Join our community of dedicated practitioners.
+          </p>
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 10,
+              },
+            }}
+            whileTap={{
+              scale: 0.95,
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 10,
+              },
+            }}
+            className="bg-gray-800 text-white px-8 py-3 rounded-md font-medium text-lg inline-flex items-center hover:bg-gray-900 transition-colors"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-secondary-dark rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="grid md:grid-cols-2">
-                <div>
-                  <img
-                    src={selectedInstructor.image}
-                    alt={selectedInstructor.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-8">
-                  <button
-                    onClick={() => setSelectedInstructor(null)}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                  >
-                    ✕
-                  </button>
-                  <h2 className="text-3xl font-bold mb-2 text-primary">
-                    {selectedInstructor.name}
-                  </h2>
-                  <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
-                    {selectedInstructor.role}
-                  </p>
-                  <p className="text-gray-700 dark:text-gray-400 mb-6">
-                    {selectedInstructor.bio}
-                  </p>
-
-                  <div className="bg-gray-50 dark:bg-background-dark/50 rounded-xl p-6 mb-6">
-                    <h3 className="text-xl font-semibold mb-4 text-primary">
-                      Key Achievements
-                    </h3>
-                    <ul className="space-y-2">
-                      {selectedInstructor.achievements.map(
-                        (achievement, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
-                          >
-                            <span className="w-2 h-2 bg-primary rounded-full" />
-                            {achievement}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
-
-                  <div className="flex space-x-4">
-                    {Object.entries(selectedInstructor.socialLinks).map(
-                      ([platform, link]) => {
-                        const Icon =
-                          platform === "linkedin"
-                            ? Linkedin
-                            : platform === "instagram"
-                            ? Instagram
-                            : Twitter;
-                        return (
-                          <a
-                            key={platform}
-                            href={link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:text-primary/80 transition-colors"
-                          >
-                            <Icon size={24} />
-                          </a>
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+            Start Your Free Trial
+            <span className="ml-2">→</span>
+          </motion.button>
+        </motion.div>
+      </div>
+    </section>
   );
 };
 
-export default About;
+export default AboutSection;
