@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, LinkedinIcon, InstagramIcon, TwitterIcon } from "lucide-react";
-
+import sushantImg from "../assets/sushant.jpg"
 const instructorsData = [
   {
     id: 1,
-    name: "Master John Rodriguez",
+    name: "Shiva Manandhar",
     role: "Chief Instructor",
     bio: "With over 25 years of martial arts experience, Master Rodriguez specializes in traditional techniques and modern training methodologies.",
     image: "/api/placeholder/400/400",
@@ -22,10 +22,10 @@ const instructorsData = [
   },
   {
     id: 2,
-    name: "Sarah Kim",
+    name: "Sushant Budhathoki Chhetri",
     role: "Senior Instructor",
     bio: "A dynamic instructor with a passion for youth development and advanced martial arts techniques.",
-    image: "/api/placeholder/400/400",
+    image: sushantImg ,
     socialLinks: {
       linkedin: "#",
       instagram: "#",
