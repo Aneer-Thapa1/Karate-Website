@@ -2,20 +2,21 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, LinkedinIcon, InstagramIcon, TwitterIcon } from "lucide-react";
 import sushantImg from "../assets/sushant.jpg"
+import shivaImg from "../assets/shiva.jpg"
 const instructorsData = [
   {
     id: 1,
     name: "Shiva Manandhar",
     role: "Chief Instructor",
-    bio: "With over 25 years of martial arts experience, Master Rodriguez specializes in traditional techniques and modern training methodologies.",
-    image: "/api/placeholder/400/400",
+    bio: "With over 15 years of martial arts experience, Sensai Shiva specializes in traditional techniques and modern training methodologies.",
+    image: shivaImg,
     socialLinks: {
       linkedin: "#",
       instagram: "#",
       twitter: "#",
     },
     achievements: [
-      "5th Degree Black Belt",
+      "2nd Degree Black Belt",
       "National Martial Arts Champion",
       "International Training Certifications",
     ],
@@ -25,21 +26,21 @@ const instructorsData = [
     name: "Sushant Budhathoki Chhetri",
     role: "Senior Instructor",
     bio: "A dynamic instructor with a passion for youth development and advanced martial arts techniques.",
-    image: sushantImg ,
+    image: sushantImg,
     socialLinks: {
       linkedin: "#",
       instagram: "#",
       twitter: "#",
     },
     achievements: [
-      "3rd Degree Black Belt",
+      "2nd Degree Black Belt",
       "Youth Training Specialist",
       "Fitness and Conditioning Expert",
     ],
-  },
+  }, 
   {
     id: 3,
-    name: "Marcus Thompson",
+    name: "Sabin Subedi",
     role: "Advanced Training Instructor",
     bio: "Brings a unique blend of traditional martial arts and modern self-defense techniques.",
     image: "/api/placeholder/400/400",
@@ -49,7 +50,7 @@ const instructorsData = [
       twitter: "#",
     },
     achievements: [
-      "4th Degree Black Belt",
+      "3th Degree Black Belt",
       "Self-Defense Methodology Innovator",
       "International Competition Judge",
     ],

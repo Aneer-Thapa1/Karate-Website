@@ -154,18 +154,18 @@ const LandingPage = () => {
             <div>
               <h4 className="text-lg font-bold mb-4">Contact Info</h4>
               <address className="not-italic text-gray-400">
-                <p className="mb-2">123 Martial Arts Way</p>
-                <p className="mb-4">Your City, State 12345</p>
-                <p className="mb-2">Phone: (555) 123-4567</p>
+                <p className="mb-2">44A Macquarie road, Auburn NSW 2144</p>
+                <p className="mb-4">Nsw, Sydney</p>
+                <p className="mb-2">Phone: 0405620057</p>
                 <p className="mb-4">Email: info@visionmartialarts.com</p>
               </address>
               <div className="bg-gray-800 p-4 rounded-md">
                 <h5 className="font-bold text-sm mb-2">Hours of Operation</h5>
                 <div className="grid grid-cols-2 gap-1 text-sm">
-                  <div>Monday - Friday</div>
-                  <div>9:00 AM - 9:00 PM</div>
+                  <div>Thursday</div>
+                  <div>5PM- 6PM</div>
                   <div>Saturday</div>
-                  <div>9:00 AM - 5:00 PM</div>
+                  <div>10 AM - 11 AM</div>
                   <div>Sunday</div>
                   <div>Closed</div>
                 </div>

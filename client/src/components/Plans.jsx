@@ -9,11 +9,11 @@ const PlansSection = () => {
 
   const plans = [
     {
-      name: "Basic",
-      price: 70,
-      sessions: 2,
+      name: "Basic one session a week",
+      price: 25,
+      sessions: 1,
       features: [
-        "2 Group Training Sessions per Week",
+        "One Group Training Sessions per Week",
         "Access to Shared Training Facilities",
         "Basic Performance Tracking",
         "Community Support",
@@ -25,12 +25,47 @@ const PlansSection = () => {
       ],
       recommended: false,
     },
+    
     {
-      name: "Premium",
-      price: 100,
+      name: "Basic Two session a week",
+      price: 35,
       sessions: 2,
       features: [
-        "2 Private Training Sessions per Week",
+        "Two Group Training Sessions per Week",
+        "Access to Shared Training Facilities",
+        "Basic Performance Tracking",
+        "Community Support",
+      ],
+      unavailableFeatures: [
+        "Private Coaching",
+        "Advanced Performance Analysis",
+        "Personalized Nutrition Guidance",
+      ],
+      recommended: false,
+    },
+
+    {
+      name: "Private class",
+      price: 50,
+      sessions: 1,
+      features: [
+        "One Private Training Sessions per Week",
+        "Comprehensive Facility Access",
+        "Advanced Performance Tracking",
+        "Personalized Coaching",
+        "Nutrition Consultation",
+        "Community Support",
+      ],
+      unavailableFeatures: [],
+      recommended: true,
+    },
+
+    {
+      name: "Private class",
+      price: 80,
+      sessions: 2,
+      features: [
+        "Two Private Training Sessions per Week",
         "Comprehensive Facility Access",
         "Advanced Performance Tracking",
         "Personalized Coaching",
